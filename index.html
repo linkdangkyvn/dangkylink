@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Đang Bị Khóa - Vui Lòng Xác Minh</title>
+    
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #e9eff1; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 450px; text-align: center; }
+        h2 { color: #333; margin-bottom: 10px; }
+        p { color: #666; font-size: 15px; margin-bottom: 30px; }
+        .btn { display: block; width: 100%; padding: 15px 0; margin: 10px 0; border-radius: 8px; text-decoration: none; color: white; font-weight: bold; font-size: 16px; transition: transform 0.2s; border: none; cursor: pointer; }
+        .btn:active { transform: scale(0.98); }
+        .btn-sub { background: #ff0000; box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3); }
+        .btn-unlock { background: #00c853; box-shadow: 0 4px 10px rgba(0, 200, 83, 0.3); display: none; } /* Ẩn nút lấy link */
+        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 20px; height: 20px; animation: spin 2s linear infinite; display: none; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>🔒 FILE BỊ KHÓA</h2>
+        <p>Để bảo vệ link khỏi spam, vui lòng hoàn thành bước xác minh dưới đây.</p>
+        
+        <a href="https://www.youtube.com/channel/UC_ID_KENH_CUA_BAN?sub_confirmation=1" target="_blank" class="btn btn-sub" onclick="xuLyMoKhoa()">
+            ▶️ Bước 1: Đăng Ký Kênh YouTube
+        </a>
+
+        <div id="loading" style="margin: 15px; display: none;">
+            <div class="spinner" style="display: block;"></div>
+            <span style="font-size: 12px; color: #888;">Đang kiểm tra... vui lòng chờ 5s</span>
+        </div>
+
+        <a href="#" class="btn btn-unlock" id="nutLayLink">
+            ✅ Bước 2: Tải Xuống Ngay
+        </a>
+    </div>
+
+    <script>
+        // 1. Tự động lấy link gốc từ trên thanh địa chỉ
+        function layLinkCanDen() {
+            const params = new URLSearchParams(window.location.search);
+            const linkGoc = params.get('link'); // Lấy cái gì sau chữ ?link=
+            
+            if (linkGoc) {
+                document.getElementById("nutLayLink").href = linkGoc;
+            } else {
+                document.getElementById("nutLayLink").href = "https://google.com"; // Link dự phòng nếu lỗi
+            }
+        }
+        
+        // Chạy ngay khi vào web
+        layLinkCanDen();
+
+        // 2. Hàm xử lý khi bấm nút Sub
+        function xuLyMoKhoa() {
+            // Hiện biểu tượng đang xoay xoay (Loading)
+            document.getElementById("loading").style.display = "block";
+            
+            // Đợi 5 giây (5000ms) rồi hiện nút Link
+            setTimeout(function(){
+                document.getElementById("loading").style.display = "none"; // Tắt loading
+                document.getElementById("nutLayLink").style.display = "block"; // Hiện nút link
+            }, 5000);
+        }
+    </script>
+
+</body>
+</html>
