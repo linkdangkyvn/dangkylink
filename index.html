@@ -3,69 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link Đang Bị Khóa - Vui Lòng Xác Minh</title>
+    <title>Link Unlocker Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #e9eff1; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 450px; text-align: center; }
-        h2 { color: #333; margin-bottom: 10px; }
-        p { color: #666; font-size: 15px; margin-bottom: 30px; }
-        .btn { display: block; width: 100%; padding: 15px 0; margin: 10px 0; border-radius: 8px; text-decoration: none; color: white; font-weight: bold; font-size: 16px; transition: transform 0.2s; border: none; cursor: pointer; }
+        /* CẤU HÌNH GIAO DIỆN CHUNG */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { background: white; width: 90%; max-width: 480px; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; position: relative; overflow: hidden; }
+        
+        /* Hiệu ứng chuyển trang mượt mà */
+        .step { display: none; animation: fadeIn 0.5s; }
+        .step.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { color: #333; margin-bottom: 5px; font-size: 22px; }
+        p { color: #666; font-size: 14px; margin-bottom: 25px; }
+
+        /* CÁC LOẠI NÚT BẤM */
+        .btn { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; margin: 12px 0; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 15px; transition: 0.3s; cursor: pointer; border: none; width: 100%; box-sizing: border-box; }
         .btn:active { transform: scale(0.98); }
-        .btn-sub { background: #ff0000; box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3); }
-        .btn-unlock { background: #00c853; box-shadow: 0 4px 10px rgba(0, 200, 83, 0.3); display: none; } /* Ẩn nút lấy link */
-        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 20px; height: 20px; animation: spin 2s linear infinite; display: none; margin: 0 auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .btn-yt { background: #ff0000; color: white; box-shadow: 0 4px 10px rgba(255, 0, 0, 0.2); }
+        .btn-yt:hover { background: #cc0000; }
+        
+        .btn-zalo { background: #0068ff; color: white; box-shadow: 0 4px 10px rgba(0, 104, 255, 0.2); }
+        
+        .btn-ads { background: #ff9900; color: white; box-shadow: 0 4px 10px rgba(255, 153, 0, 0.2); } /* Nút cho Direct Link */
+
+        .btn-next { background: #e0e0e0; color: #888; pointer-events: none; justify-content: center; margin-top: 20px; } /* Mặc định bị khóa */
+        .btn-next.unlocked { background: #00c853; color: white; pointer-events: auto; box-shadow: 0 4px 10px rgba(0, 200, 83, 0.3); animation: pulse 1.5s infinite; }
+        
+        .btn-final { background: #00c853; color: white; justify-content: center; font-size: 18px; text-transform: uppercase; }
+
+        /* THANH TIẾN TRÌNH */
+        .progress-container { background: #e0e0e0; height: 6px; border-radius: 3px; margin: 20px 0; overflow: hidden; }
+        .progress-bar { height: 100%; background: #00c853; width: 0%; transition: width 0.5s; }
+
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(0, 200, 83, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0); } }
+        .icon-box { font-size: 40px; margin-bottom: 15px; color: #333; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h2>🔒 FILE BỊ KHÓA</h2>
-        <p>Để bảo vệ link khỏi spam, vui lòng hoàn thành bước xác minh dưới đây.</p>
-        
-        <a href="https://www.youtube.com/channel/UC_ID_KENH_CUA_BAN?sub_confirmation=1" target="_blank" class="btn btn-sub" onclick="xuLyMoKhoa()">
-            ▶️ Bước 1: Đăng Ký Kênh YouTube
-        </a>
-
-        <div id="loading" style="margin: 15px; display: none;">
-            <div class="spinner" style="display: block;"></div>
-            <span style="font-size: 12px; color: #888;">Đang kiểm tra... vui lòng chờ 5s</span>
+    <div class="container">
+        <div class="progress-container">
+            <div class="progress-bar" id="myBar"></div>
         </div>
 
-        <a href="#" class="btn btn-unlock" id="nutLayLink">
-            ✅ Bước 2: Tải Xuống Ngay
-        </a>
+        <div id="step1" class="step active">
+            <div class="icon-box">🔗</div>
+            <h2>Liên kết đã sẵn sàng!</h2>
+            <p>Hệ thống đã tìm thấy file của bạn.</p>
+            <button class="btn btn-final" onclick="chuyenTrang(2)" style="background: #333;">
+                Tiếp tục / Continue <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <div id="step2" class="step">
+            <h2>Bước 1/4</h2>
+            <p>Đăng ký kênh để mở khóa</p>
+            
+            <a href="https://www.youtube.com/channel/ID_KENH_1?sub_confirmation=1" target="_blank" class="btn btn-yt" onclick="moKhoaNut('next2')">
+                <span><i class="fab fa-youtube"></i> Đăng ký Kênh 1</span> <i class="fas fa-chevron-right"></i>
+            </a>
+            
+            <a href="https://www.youtube.com/channel/ID_KENH_2?sub_confirmation=1" target="_blank" class="btn btn-yt" onclick="moKhoaNut('next2')">
+                <span><i class="fab fa-youtube"></i> Đăng ký Kênh 2</span> <i class="fas fa-chevron-right"></i>
+            </a>
+
+            <button id="next2" class="btn btn-next" onclick="chuyenTrang(3)">
+                Bước Tiếp Theo (1/3) <i class="fas fa-lock"></i>
+            </button>
+        </div>
+
+        <div id="step3" class="step">
+            <h2>Bước 2/4</h2>
+            <p>Ủng hộ thêm kênh phụ</p>
+            
+            <a href="https://www.youtube.com/channel/ID_KENH_3?sub_confirmation=1" target="_blank" class="btn btn-yt" onclick="moKhoaNut('next3')">
+                <span><i class="fab fa-youtube"></i> Đăng ký Kênh 3</span> <i class="fas fa-chevron-right"></i>
+            </a>
+            
+            <a href="https://www.youtube.com/channel/ID_KENH_4?sub_confirmation=1" target="_blank" class="btn btn-yt" onclick="moKhoaNut('next3')">
+                <span><i class="fab fa-youtube"></i> Đăng ký Kênh 4</span> <i class="fas fa-chevron-right"></i>
+            </a>
+
+            <button id="next3" class="btn btn-next" onclick="chuyenTrang(4)">
+                Bước Tiếp Theo (2/3) <i class="fas fa-lock"></i>
+            </button>
+        </div>
+
+        <div id="step4" class="step">
+            <h2>Bước 3/4</h2>
+            <p>Tham gia nhóm & Kiểm tra bảo mật</p>
+            
+            <a href="https://zalo.me/g/LINK_NHOM_ZALO" target="_blank" class="btn btn-zalo" onclick="moKhoaNut('next4')">
+                <span><i class="fas fa-users"></i> Tham gia Group Zalo</span> <i class="fas fa-chevron-right"></i>
+            </a>
+            
+            <a href="https://www.google.com" target="_blank" class="btn btn-ads" onclick="moKhoaNut('next4')">
+                <span><i class="fas fa-star"></i> Xác minh Robot (Click me)</span> <i class="fas fa-external-link-alt"></i>
+            </a>
+
+            <button id="next4" class="btn btn-next" onclick="chuyenTrang(5)">
+                Bước Tiếp Theo (3/3) <i class="fas fa-lock"></i>
+            </button>
+        </div>
+
+        <div id="step5" class="step">
+            <div class="icon-box" style="color: #00c853;">🎉</div>
+            <h2>Thành công!</h2>
+            <p>Link của bạn đã sẵn sàng tải xuống.</p>
+            
+            <a href="#" id="finalLink" class="btn btn-final">
+                <i class="fas fa-download"></i> TẢI XUỐNG NGAY
+            </a>
+        </div>
     </div>
 
     <script>
-        // 1. Tự động lấy link gốc từ trên thanh địa chỉ
-        function layLinkCanDen() {
-            const params = new URLSearchParams(window.location.search);
-            const linkGoc = params.get('link'); // Lấy cái gì sau chữ ?link=
+        // Hàm chuyển trang
+        function chuyenTrang(soTrang) {
+            // Ẩn tất cả các bước
+            document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+            // Hiện bước mong muốn
+            document.getElementById('step' + soTrang).classList.add('active');
             
-            if (linkGoc) {
-                document.getElementById("nutLayLink").href = linkGoc;
-            } else {
-                document.getElementById("nutLayLink").href = "https://google.com"; // Link dự phòng nếu lỗi
-            }
+            // Cập nhật thanh tiến trình
+            let phanTram = (soTrang - 1) * 25; // 0% -> 25% -> 50% -> 75% -> 100%
+            document.getElementById("myBar").style.width = phanTram + "%";
         }
-        
-        // Chạy ngay khi vào web
-        layLinkCanDen();
 
-        // 2. Hàm xử lý khi bấm nút Sub
-        function xuLyMoKhoa() {
-            // Hiện biểu tượng đang xoay xoay (Loading)
-            document.getElementById("loading").style.display = "block";
-            
-            // Đợi 5 giây (5000ms) rồi hiện nút Link
-            setTimeout(function(){
-                document.getElementById("loading").style.display = "none"; // Tắt loading
-                document.getElementById("nutLayLink").style.display = "block"; // Hiện nút link
-            }, 5000);
+        // Hàm mở khóa nút Next khi người dùng click vào nhiệm vụ
+        function moKhoaNut(idNut) {
+            // Hiệu ứng chờ 2 giây giả vờ kiểm tra
+            setTimeout(() => {
+                let nut = document.getElementById(idNut);
+                nut.classList.add('unlocked');
+                nut.innerHTML = 'Tiếp Tục <i class="fas fa-arrow-right"></i>';
+            }, 2000);
+        }
+
+        // Lấy link đích từ URL (?link=...)
+        const params = new URLSearchParams(window.location.search);
+        const linkGoc = params.get('link');
+        
+        if (linkGoc) {
+            document.getElementById("finalLink").href = linkGoc;
+        } else {
+            // Link mặc định nếu thiếu
+            document.getElementById("finalLink").href = "https://google.com";
+            document.querySelector("p").innerText = "Lỗi: Không tìm thấy link!";
         }
     </script>
-
 </body>
 </html>
