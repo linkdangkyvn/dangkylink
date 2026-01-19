@@ -34,25 +34,25 @@
         </div>
     </div>
 
-    <script>
+   <script>
         function taoLink() {
             let linkGoc = document.getElementById("linkInput").value.trim();
             
+            // Tự động nhận diện nếu người dùng lỡ dán link đã mã hóa
+            if (linkGoc.includes("?id=")) {
+                alert("Bạn đang dán nhầm link đã mã hóa rồi! Hãy dán link gốc (Drive/Fshare).");
+                return;
+            }
+
             if (linkGoc.length < 5) {
                 document.getElementById("ketQua").style.display = "none";
                 return;
             }
 
-            // 1. Mã hóa link gốc thành Base64 (Để giấu link)
             let linkMaHoa = btoa(linkGoc);
-
-            // 2. Lấy địa chỉ web hiện tại (bỏ chữ admin.html đi)
             let trangChu = window.location.href.replace("admin.html", "");
-
-            // 3. Tạo link hoàn chỉnh
             let linkXong = trangChu + "?id=" + linkMaHoa;
 
-            // Hiển thị ra màn hình
             document.getElementById("linkOutput").innerText = linkXong;
             document.getElementById("ketQua").style.display = "block";
         }
@@ -60,9 +60,18 @@
         function copyLink() {
             let text = document.getElementById("linkOutput").innerText;
             navigator.clipboard.writeText(text);
-            alert("Đã copy xong! Giờ đi rải link thôi!");
+            
+            // HIỆU ỨNG MỚI: Đổi nút thành "Đã Copy" trong 2 giây
+            let btn = document.querySelector('.copy-btn');
+            let textCu = btn.innerText;
+            
+            btn.innerText = "Đã Copy! ✅";
+            btn.style.background = "#333"; // Đổi màu nút cho ngầu
+            
+            setTimeout(() => {
+                btn.innerText = "Sao Chép Ngay";
+                btn.style.background = "#007bff"; // Trả lại màu cũ
+            }, 2000);
         }
     </script>
-
-</body>
 </html>
