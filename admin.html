@@ -9,13 +9,39 @@
         .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 90%; max-width: 500px; }
         h2 { text-align: center; color: #333; margin-top: 0; }
         label { font-weight: bold; display: block; margin-top: 15px; }
-        input { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; margin-top: 20px; background: #28a745; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; }
-        button:hover { background: #218838; }
+        
+        /* KHU VỰC NHẬP LINK + NÚT XÓA */
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Khoảng cách giữa ô nhập và nút X */
+        }
+        
+        input { 
+            flex: 1; /* Ô nhập chiếm hết chỗ trống */
+            padding: 12px; margin-top: 5px; 
+            border: 1px solid #ddd; border-radius: 6px; 
+            box-sizing: border-box; 
+        }
+        
+        /* NÚT XÓA (MÀU ĐỎ) */
+        .clear-btn {
+            width: 50px;
+            background: #dc3545; /* Màu đỏ */
+            color: white;
+            border: none; border-radius: 6px;
+            font-size: 18px; font-weight: bold;
+            padding: 11px; margin-top: 5px;
+            cursor: pointer;
+        }
+        .clear-btn:hover { background: #c82333; }
+
+        /* NÚT SAO CHÉP */
+        .copy-btn { width: 100%; padding: 12px; margin-top: 20px; background: #28a745; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        .copy-btn:hover { background: #218838; }
         
         .result-box { margin-top: 20px; padding: 15px; background: #e9ecef; border-radius: 6px; display: none; word-wrap: break-word; }
         .link-text { color: #d63384; font-weight: bold; margin-bottom: 10px; display: block; }
-        .copy-btn { background: #007bff; margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -25,7 +51,11 @@
         <p style="color:#666; font-size: 14px; text-align:center;">Biến 1 link gốc thành link kiếm tiền trong 1 giây.</p>
         
         <label>Dán link gốc vào đây (Drive, Fshare...):</label>
-        <input type="text" id="linkInput" placeholder="https://drive.google.com/file/d/..." oninput="taoLink()">
+        
+        <div class="input-group">
+            <input type="text" id="linkInput" placeholder="https://drive.google.com/..." oninput="taoLink()">
+            <button class="clear-btn" onclick="xoaLink()" title="Xóa link cũ">✖</button>
+        </div>
 
         <div id="ketQua" class="result-box">
             <label>Link kiếm tiền của bạn:</label>
@@ -34,13 +64,15 @@
         </div>
     </div>
 
-   <script>
+    <script>
+        // HÀM TẠO LINK TỰ ĐỘNG
         function taoLink() {
             let linkGoc = document.getElementById("linkInput").value.trim();
             
-            // Tự động nhận diện nếu người dùng lỡ dán link đã mã hóa
+            // Chặn nếu dán nhầm link đã mã hóa
             if (linkGoc.includes("?id=")) {
-                alert("Bạn đang dán nhầm link đã mã hóa rồi! Hãy dán link gốc (Drive/Fshare).");
+                alert("Đừng dán link đã mã hóa! Hãy dán link gốc.");
+                xoaLink();
                 return;
             }
 
@@ -57,21 +89,30 @@
             document.getElementById("ketQua").style.display = "block";
         }
 
+        // HÀM SAO CHÉP (KHÔNG HIỆN THÔNG BÁO PHIỀN)
         function copyLink() {
             let text = document.getElementById("linkOutput").innerText;
             navigator.clipboard.writeText(text);
             
-            // HIỆU ỨNG MỚI: Đổi nút thành "Đã Copy" trong 2 giây
+            // Hiệu ứng đổi màu nút
             let btn = document.querySelector('.copy-btn');
-            let textCu = btn.innerText;
-            
             btn.innerText = "Đã Copy! ✅";
-            btn.style.background = "#333"; // Đổi màu nút cho ngầu
+            btn.style.background = "#333";
             
             setTimeout(() => {
                 btn.innerText = "Sao Chép Ngay";
-                btn.style.background = "#007bff"; // Trả lại màu cũ
+                btn.style.background = "#28a745";
             }, 2000);
         }
+
+        // HÀM XÓA LINK (NÚT MÀU ĐỎ)
+        function xoaLink() {
+            let input = document.getElementById("linkInput");
+            input.value = ""; // Xóa chữ
+            document.getElementById("ketQua").style.display = "none"; // Ẩn kết quả
+            input.focus(); // Đặt con trỏ chuột lại vào ô nhập
+        }
     </script>
+
+</body>
 </html>
