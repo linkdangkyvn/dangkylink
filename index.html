@@ -3,47 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Link Unlocker V8.1 - Clean Task</title>
+    <title>Link Unlocker V11 - Pro UI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* GIAO DIỆN V8.0 GỐC - KHÔNG CÓ BANNER */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; box-sizing: border-box; }
-        .container { background: white; width: 100%; max-width: 460px; padding: 30px 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; position: relative; overflow: hidden; }
+        /* --- CẤU HÌNH GIAO DIỆN --- */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #eef2f5; /* Màu nền sáng hơn chút cho sang */
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 20px; 
+            box-sizing: border-box; 
+        }
+
+        .container { 
+            background: white; 
+            width: 100%; 
+            max-width: 460px; 
+            padding: 35px 25px; 
+            border-radius: 24px; /* Bo tròn nhiều hơn */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08); /* Bóng mờ nhẹ, không gắt */
+            text-align: center; 
+            position: relative; 
+            overflow: hidden; 
+        }
         
-        .step { display: none !important; animation: fadeIn 0.3s ease; }
+        .step { display: none !important; animation: slideUp 0.4s ease-out; }
         .step.active { display: block !important; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        h2 { color: #2c3e50; margin: 0 0 8px 0; font-size: 22px; font-weight: 700; }
-        p { color: #7f8c8d; font-size: 15px; margin-bottom: 25px; line-height: 1.5; }
+        h2 { color: #2c3e50; margin: 0 0 10px 0; font-size: 24px; font-weight: 800; }
+        p { color: #636e72; font-size: 15px; margin-bottom: 25px; line-height: 1.6; }
 
-        .btn-task { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; margin-bottom: 12px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 15px; transition: transform 0.2s; cursor: pointer; border: none; width: 100%; box-sizing: border-box; position: relative; color: white; }
-        .btn-task:active { transform: scale(0.97); }
+        /* --- NÚT NHIỆM VỤ (YouTube/Zalo) - Hiệu ứng nhẹ --- */
+        .btn-task { 
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: 16px 20px; margin-bottom: 12px; border-radius: 14px; 
+            text-decoration: none; font-weight: 600; font-size: 15px; 
+            transition: all 0.2s ease; cursor: pointer; border: none; 
+            width: 100%; box-sizing: border-box; position: relative; color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Bóng nhẹ mặc định */
+        }
+        .btn-task:active { transform: scale(0.98); box-shadow: none; }
         
-        .btn-yt { background: #ff0000; box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2); }
-        .btn-zalo { background: #0068ff; box-shadow: 0 4px 12px rgba(0, 104, 255, 0.2); }
-        .btn-ads { background: linear-gradient(135deg, #f1c40f, #f39c12); box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3); border: 1px solid #e67e22; }
+        /* Màu Gradient đẹp mắt */
+        .btn-yt { background: linear-gradient(135deg, #ff4d4d, #c0392b); }
+        .btn-zalo { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .btn-ads { background: linear-gradient(135deg, #f1c40f, #f39c12); }
 
-        .btn-task.loading { background: #95a5a6 !important; pointer-events: none; justify-content: center; box-shadow: none; border: none; color: #eee; }
-        .btn-task.done { background: #27ae60 !important; color: white; pointer-events: none; justify-content: center; box-shadow: none; border: none; }
+        .btn-task.loading { background: #bdc3c7 !important; pointer-events: none; justify-content: center; color: #fff; }
+        .btn-task.done { background: #2ecc71 !important; color: white; pointer-events: none; justify-content: center; }
 
         .divider-container { margin: 30px 0 20px 0; position: relative; text-align: center; }
-        .divider-line { border-top: 2px dashed #dcdcdc; width: 100%; position: absolute; top: 50%; z-index: 1; }
-        .divider-text { background: #fff; padding: 0 15px; color: #aaa; font-size: 12px; font-weight: bold; text-transform: uppercase; position: relative; z-index: 2; }
+        .divider-line { border-top: 2px dashed #e0e0e0; width: 100%; position: absolute; top: 50%; z-index: 1; }
+        .divider-text { background: #fff; padding: 0 15px; color: #b2bec3; font-size: 12px; font-weight: 700; text-transform: uppercase; position: relative; z-index: 2; }
 
-        /* Nút Next dùng thẻ A để dễ gắn link khi unlocked */
-        .btn-next { background: #e0e0e0; color: #999; pointer-events: none; border-radius: 50px; padding: 18px; width: 100%; border: none; font-weight: bold; font-size: 16px; display: flex; justify-content: center; align-items: center; transition: 0.3s; text-decoration: none; }
-        .btn-next.unlocked { background: linear-gradient(135deg, #11998e, #38ef7d); color: white; pointer-events: auto; box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4); cursor: pointer; animation: pulse 2s infinite; }
+        /* --- NÚT ĐIỀU HƯỚNG (Bắt đầu / Tiếp tục) --- */
+        /* Fix lỗi lệch nút: Dùng Flexbox chuẩn */
+        .btn-next { 
+            background: #dfe6e9; color: #a4b0be; 
+            pointer-events: none; border-radius: 50px; 
+            padding: 18px; width: 100%; border: none; 
+            font-weight: 800; font-size: 16px; 
+            display: flex; justify-content: center; align-items: center; 
+            gap: 10px; /* Khoảng cách giữa chữ và icon */
+            transition: 0.3s; text-decoration: none; 
+            cursor: not-allowed;
+        }
         
-        .progress-bg { background: #f1f2f6; height: 8px; border-radius: 10px; margin-bottom: 25px; overflow: hidden; }
-        .progress-bar { height: 100%; background: linear-gradient(90deg, #ff9966, #ff5e62); width: 0%; transition: width 0.3s ease-in-out; }
+        .btn-next.unlocked { 
+            background: linear-gradient(135deg, #00b894, #00cec9); /* Màu xanh ngọc */
+            color: white; 
+            pointer-events: auto; 
+            box-shadow: 0 8px 20px rgba(0, 184, 148, 0.4); /* Bóng phát sáng */
+            cursor: pointer; 
+            animation: float 3s ease-in-out infinite; 
+        }
 
-        .spinner { width: 16px; height: 16px; border: 2px solid #fff; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 10px; display: none; }
+        /* Hiệu ứng nổi nhẹ cho nút Next */
+        @keyframes float { 
+            0% { transform: translateY(0px); box-shadow: 0 8px 20px rgba(0, 184, 148, 0.4); } 
+            50% { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(0, 184, 148, 0.2); } 
+            100% { transform: translateY(0px); box-shadow: 0 8px 20px rgba(0, 184, 148, 0.4); } 
+        }
+        
+        .progress-bg { background: #dfe6e9; height: 6px; border-radius: 10px; margin-bottom: 30px; overflow: hidden; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #ff7675, #d63031); width: 0%; transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+
+        .spinner { width: 18px; height: 18px; border: 3px solid #fff; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 10px; display: none; }
         .btn-task.loading .spinner { display: inline-block; }
         
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
@@ -52,14 +106,14 @@
         <div class="progress-bg"><div class="progress-bar" id="myBar"></div></div>
 
         <div id="step1" class="step">
-            <div style="font-size: 40px; margin-bottom: 10px;">👋</div>
-            <h2>Bắt Đầu</h2>
-            <p>Hệ thống đang tạo link.<br>Nhấn nút bên dưới để bắt đầu.</p>
+            <div style="font-size: 45px; margin-bottom: 15px;">👋</div>
+            <h2>Xin Chào!</h2>
+            <p>Hệ thống đã chuẩn bị xong file.<br>Nhấn nút bên dưới để bắt đầu.</p>
             <div class="divider-container"><div class="divider-line"></div><span class="divider-text">Sẵn sàng</span></div>
             
-            <a href="#" class="btn-next unlocked" onclick="moQuangCaoVaChuyen(2); return false;">
-                BẮT ĐẦU NGAY &nbsp; <i class="fas fa-arrow-right"></i>
-            </a>
+            <button class="btn-next unlocked" onclick="xuLyClickQuangCao(this, 2)">
+                BẮT ĐẦU NGAY <i class="fas fa-arrow-right"></i>
+            </button>
         </div>
 
         <div id="step2" class="step">
@@ -75,9 +129,9 @@
 
             <div class="divider-container"><div class="divider-line"></div><span class="divider-text">Tiến trình</span></div>
             
-            <a href="#" id="btn-next-2" class="btn-next" onclick="moQuangCaoVaChuyen(3); return false;" data-req="2" data-done="0">
+            <button id="btn-next-2" class="btn-next" onclick="xuLyClickQuangCao(this, 3)" data-req="2" data-done="0">
                 <i class="fas fa-lock"></i> &nbsp; Hoàn thành 0/2
-            </a>
+            </button>
         </div>
 
         <div id="step3" class="step">
@@ -93,9 +147,9 @@
 
             <div class="divider-container"><div class="divider-line"></div><span class="divider-text">Tiến trình</span></div>
             
-            <a href="#" id="btn-next-3" class="btn-next" onclick="moQuangCaoVaChuyen(4); return false;" data-req="2" data-done="0">
+            <button id="btn-next-3" class="btn-next" onclick="xuLyClickQuangCao(this, 4)" data-req="2" data-done="0">
                 <i class="fas fa-lock"></i> &nbsp; Hoàn thành 0/2
-            </a>
+            </button>
         </div>
 
         <div id="step4" class="step">
@@ -106,61 +160,77 @@
                 <span><i class="fas fa-users"></i> &nbsp; Tham gia Zalo</span> <i class="fas fa-chevron-right"></i>
             </a>
             
-            <a id="task-4-2" href="#" class="btn-task btn-ads" onclick="xuLyQuangCao5s(this, 4); return false;">
+            <a id="task-4-2" href="https://www.effectivegatecpm.com/wg1qvzvr8x?key=d28637e87066c0e12b4fae327d34c789" class="btn-task btn-ads" onclick="xuLyQuangCao5s(this, 4); return false;">
                 <span><i class="fas fa-star"></i> &nbsp; Xác minh Robot (Click)</span> <i class="fas fa-external-link-alt"></i>
             </a>
 
             <div class="divider-container"><div class="divider-line"></div><span class="divider-text">Tiến trình</span></div>
             
-            <a href="#" id="btn-next-4" class="btn-next" onclick="moQuangCaoVaChuyen(5); return false;" data-req="2" data-done="0">
+            <button id="btn-next-4" class="btn-next" onclick="xuLyClickQuangCao(this, 5)" data-req="2" data-done="0">
                 <i class="fas fa-lock"></i> &nbsp; Hoàn thành 0/2
-            </a>
+            </button>
         </div>
 
         <div id="step5" class="step">
-            <div style="font-size: 50px; margin-bottom: 10px;">🎉</div>
+            <div style="font-size: 60px; margin-bottom: 10px;">🎉</div>
             <h2 style="color: #27ae60;">Thành Công!</h2>
             <p>Link tải của bạn ở bên dưới.</p>
             <div class="divider-container"><div class="divider-line"></div><span class="divider-text">Hoàn tất</span></div>
-            <a href="#" id="finalLink" class="btn-next unlocked">
-                <i class="fas fa-download"></i> &nbsp; TẢI FILE NGAY
+            <a href="#" id="finalLink" class="btn-next unlocked" onclick="xuLyClickQuangCao(this, 'link_goc'); return false;">
+                <i class="fas fa-download"></i> TẢI FILE NGAY
             </a>
         </div>
     </div>
 
     <script>
-        // === CẤU HÌNH LINK KIẾM TIỀN (DÁN LINK DIRECT VÀO ĐÂY) ===
-        const MY_DIRECT_LINK = "https://www.effectivegatecpm.com/wg1qvzvr8x?key=d28637e87066c0e12b4fae327d34c789";
+        // ===============================================
+        // 👉 CẤU HÌNH: DÁN LINK KIẾM TIỀN VÀO DÒNG DƯỚI
+        // ===============================================
+        const LINK_QUANG_CAO = "https://www.effectivegatecpm.com/wg1qvzvr8x?key=d28637e87066c0e12b4fae327d34c789";
 
-        // === 1. HÀM MỞ QUẢNG CÁO RỒI CHUYỂN TRANG (Dùng cho nút Bắt Đầu & Tiếp Tục) ===
-        function moQuangCaoVaChuyen(nextStep) {
-            // Kiểm tra xem nút có active không
-            // Nếu là nút Bắt đầu (không có id) hoặc nút Next đã unlocked thì mới chạy
-            let btn = event.target.closest('.btn-next');
-            if (btn && !btn.classList.contains('unlocked')) return;
+        
+        // === 1. LOGIC CLICK 2 LẦN (Click 1: QC -> Quay lại -> Click 2: Đi tiếp) ===
+        // Áp dụng cho: Bắt đầu, Qua bước, Lấy file
+        function xuLyClickQuangCao(btn, nextStep) {
+            // Nếu nút chưa mở khóa thì không làm gì cả
+            if (!btn.classList.contains('unlocked')) return;
 
-            // Mở tab quảng cáo
-            window.open(MY_DIRECT_LINK, '_blank');
-            
-            // Chuyển bước sau 0.5s
-            setTimeout(() => {
+            // Kiểm tra xem đã bấm QC lần nào chưa?
+            if (!btn.dataset.clickedAds) {
+                // LẦN 1: Mở QC
+                window.open(LINK_QUANG_CAO, '_blank');
+                
+                // Đánh dấu đã bấm
+                btn.dataset.clickedAds = "true";
+                
+                // Đổi chữ để nhắc người dùng
+                /* btn.innerHTML = 'BẤM LẠI ĐỂ TIẾP TỤC <i class="fas fa-check"></i>'; */ 
+                // (Tùy chọn: Có thể giữ nguyên chữ cho đỡ rối)
+                
+                return; // Dừng lại, không chuyển trang
+            }
+
+            // LẦN 2 (Khi đã bấm QC): Thực hiện chuyển trang
+            if (nextStep === 'link_goc') {
+                // Nếu là nút tải file cuối cùng -> Mở link gốc
+                window.location.href = document.getElementById('finalLink').href;
+            } else {
                 chuyenTrang(nextStep);
-            }, 500);
+            }
         }
 
-        // === 2. HÀM NHIỆM VỤ SẠCH (Không QC, chỉ UI & Save) ===
+        // === 2. NHIỆM VỤ SẠCH (YouTube/Zalo) ===
+        // Không có window.open QC ở đây -> Sạch 100%
         function xuLyNhiemVuSach(el, step) {
-            // Không chặn sự kiện mặc định -> Link href sẽ tự mở tab mới
             if(el.classList.contains('done')) return;
             
             el.classList.add('loading');
             el.querySelector('span').innerHTML = '<div class="spinner"></div> Đang kiểm tra...';
             el.querySelector('.fa-chevron-right').style.display = 'none';
             
-            // Lưu ngay lập tức
+            // Lưu lại ngay
             saveTask(el.id);
             
-            // Đợi 2s thì hiện Done
             setTimeout(() => {
                 el.classList.remove('loading');
                 el.classList.add('done');
@@ -169,12 +239,12 @@
             }, 2000);
         }
 
-        // === 3. XỬ LÝ QUẢNG CÁO 5S (Trang 3) ===
+        // === 3. NHIỆM VỤ XÁC MINH (Click QC 5s) ===
         function xuLyQuangCao5s(el, step) {
             if(el.classList.contains('done')) return;
             
-            // Mở quảng cáo thủ công
-            window.open(MY_DIRECT_LINK, '_blank');
+            // Cái này bắt buộc phải mở QC
+            window.open(LINK_QUANG_CAO, '_blank');
 
             el.classList.add('loading');
             el.querySelector('.fa-external-link-alt').style.display = 'none';
@@ -195,7 +265,7 @@
             }, 1000);
         }
 
-        // === 4. HỆ THỐNG LƯU TRỮ (V8.0 Gốc) ===
+        // === 4. HỆ THỐNG LƯU TRỮ (V8.0) ===
         const params = new URLSearchParams(window.location.search);
         const linkID = params.get('id') || params.get('link') || 'demo';
         const storageKey = 'link_tasks_' + linkID;
@@ -237,7 +307,8 @@
             if(done >= req) {
                 btn.classList.add('unlocked');
                 btn.innerHTML = 'TIẾP TỤC &nbsp; <i class="fas fa-arrow-right"></i>';
-                btn.style.pointerEvents = 'auto'; // Cho phép click
+                // Reset trạng thái clickedAds để bước sau lại phải bấm QC
+                btn.removeAttribute('data-clicked-ads'); 
             }
         }
 
@@ -257,8 +328,10 @@
             while (actives.length) actives[0].classList.remove('active');
             let target = document.getElementById('step' + n);
             if(target) target.classList.add('active');
+            
             let bar = document.getElementById('myBar');
             if(bar) bar.style.width = ((n-1)*25) + "%";
+            
             if (updateHistory) window.location.hash = "step" + n;
         }
 
@@ -271,7 +344,7 @@
             if(done >= req) {
                 btn.classList.add('unlocked');
                 btn.innerHTML = 'TIẾP TỤC &nbsp; <i class="fas fa-arrow-right"></i>';
-                btn.style.pointerEvents = 'auto';
+                btn.removeAttribute('data-clicked-ads');
             }
         }
 
@@ -282,9 +355,5 @@
 
         khoiPhucTrang();
     </script>
-    
-    <script async src="https://pl28509723.effectivegatecpm.com/50/5f/53/505f5395f6cbf8e7c711f97b861a4233.js"></script>
-    <script async src="https://pl28509728.effectivegatecpm.com/af/4e/58/af4e58f14a43905474b0082289e54c49.js"></script>
-
 </body>
 </html>
