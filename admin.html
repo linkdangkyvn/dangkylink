@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công Cụ Tạo Link Link4Sub</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; padding-top: 50px; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 90%; max-width: 500px; }
+        h2 { text-align: center; color: #333; margin-top: 0; }
+        label { font-weight: bold; display: block; margin-top: 15px; }
+        input { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; margin-top: 20px; background: #28a745; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        button:hover { background: #218838; }
+        
+        .result-box { margin-top: 20px; padding: 15px; background: #e9ecef; border-radius: 6px; display: none; word-wrap: break-word; }
+        .link-text { color: #d63384; font-weight: bold; margin-bottom: 10px; display: block; }
+        .copy-btn { background: #007bff; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>🛠️ MÁY TẠO LINK</h2>
+        <p style="color:#666; font-size: 14px; text-align:center;">Biến 1 link gốc thành link kiếm tiền trong 1 giây.</p>
+        
+        <label>Dán link gốc vào đây (Drive, Fshare...):</label>
+        <input type="text" id="linkInput" placeholder="https://drive.google.com/file/d/..." oninput="taoLink()">
+
+        <div id="ketQua" class="result-box">
+            <label>Link kiếm tiền của bạn:</label>
+            <span id="linkOutput" class="link-text"></span>
+            <button class="copy-btn" onclick="copyLink()">Sao Chép Ngay</button>
+        </div>
+    </div>
+
+    <script>
+        function taoLink() {
+            let linkGoc = document.getElementById("linkInput").value.trim();
+            
+            if (linkGoc.length < 5) {
+                document.getElementById("ketQua").style.display = "none";
+                return;
+            }
+
+            // 1. Mã hóa link gốc thành Base64 (Để giấu link)
+            let linkMaHoa = btoa(linkGoc);
+
+            // 2. Lấy địa chỉ web hiện tại (bỏ chữ admin.html đi)
+            let trangChu = window.location.href.replace("admin.html", "");
+
+            // 3. Tạo link hoàn chỉnh
+            let linkXong = trangChu + "?id=" + linkMaHoa;
+
+            // Hiển thị ra màn hình
+            document.getElementById("linkOutput").innerText = linkXong;
+            document.getElementById("ketQua").style.display = "block";
+        }
+
+        function copyLink() {
+            let text = document.getElementById("linkOutput").innerText;
+            navigator.clipboard.writeText(text);
+            alert("Đã copy xong! Giờ đi rải link thôi!");
+        }
+    </script>
+
+</body>
+</html>
