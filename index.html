@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Link Unlocker V8 - Memory King</title>
+    <title>Link Unlocker V11 - Double Tap</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* GIỮ NGUYÊN GIAO DIỆN ĐẸP */
+        /* GIỮ NGUYÊN GIAO DIỆN V8, CHỈNH SỬA CĂN GIỮA NÚT */
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; box-sizing: border-box; }
         .container { background: white; width: 100%; max-width: 460px; padding: 30px 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; position: relative; overflow: hidden; }
         
@@ -32,8 +32,26 @@
         .divider-line { border-top: 2px dashed #dcdcdc; width: 100%; position: absolute; top: 50%; z-index: 1; }
         .divider-text { background: #fff; padding: 0 15px; color: #aaa; font-size: 12px; font-weight: bold; text-transform: uppercase; position: relative; z-index: 2; }
 
-        .btn-next { background: #e0e0e0; color: #999; pointer-events: none; border-radius: 50px; padding: 18px; width: 100%; border: none; font-weight: bold; font-size: 16px; display: flex; justify-content: center; align-items: center; transition: 0.3s; }
-        .btn-next.unlocked { background: linear-gradient(135deg, #11998e, #38ef7d); color: white; pointer-events: auto; box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4); cursor: pointer; animation: pulse 2s infinite; }
+        /* --- SỬA LỖI LỆCH NÚT --- */
+        .btn-next { 
+            background: #e0e0e0; color: #999; pointer-events: none; 
+            border-radius: 50px; padding: 18px; width: 100%; border: none; 
+            font-weight: bold; font-size: 16px; 
+            display: flex; justify-content: center; align-items: center; /* Căn giữa tuyệt đối */
+            transition: 0.3s; 
+            text-decoration: none; /* Bỏ gạch chân thẻ a */
+            cursor: not-allowed;
+            gap: 8px; /* Khoảng cách icon và chữ */
+        }
+        
+        .btn-next.unlocked { 
+            background: linear-gradient(135deg, #11998e, #38ef7d); 
+            color: white; 
+            pointer-events: auto; 
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4); 
+            cursor: pointer; 
+            animation: pulse 2s infinite; 
+        }
         
         .progress-bg { background: #f1f2f6; height: 8px; border-radius: 10px; margin-bottom: 25px; overflow: hidden; }
         .progress-bar { height: 100%; background: linear-gradient(90deg, #ff9966, #ff5e62); width: 0%; transition: width 0.3s ease-in-out; }
@@ -56,8 +74,9 @@
             <h2>Bắt Đầu</h2>
             <p>Hệ thống đang tạo link.<br>Nhấn nút bên dưới để bắt đầu.</p>
             <div class="divider-container"><div class="divider-line"></div><span class="divider-text">Sẵn sàng</span></div>
-            <a href="https://www.effectivegatecpm.com/wg1qvzvr8x?key=d28637e87066c0e12b4fae327d34c789" target="_blank" class="btn-next unlocked" onclick="setTimeout(() => { chuyenTrang(2) }, 500)">
-                BẮT ĐẦU NGAY &nbsp; <i class="fas fa-arrow-right"></i>
+            
+            <a href="#" class="btn-next unlocked" onclick="xuLyClickQuangCao(this, 2); return false;">
+                BẮT ĐẦU NGAY <i class="fas fa-arrow-right"></i>
             </a>
         </div>
 
@@ -74,9 +93,9 @@
             </a>
 
             <div class="divider-container"><div class="divider-line"></div><span class="divider-text">Tiến trình</span></div>
-            <button id="btn-next-2" class="btn-next" onclick="chuyenTrang(3)" data-req="2" data-done="0">
-                <i class="fas fa-lock"></i> &nbsp; Hoàn thành 0/2
-            </button>
+            <a href="#" id="btn-next-2" class="btn-next" onclick="xuLyClickQuangCao(this, 3); return false;" data-req="2" data-done="0">
+                <i class="fas fa-lock"></i> Hoàn thành 0/2
+            </a>
         </div>
 
         <div id="step3" class="step">
@@ -91,9 +110,9 @@
             </a>
 
             <div class="divider-container"><div class="divider-line"></div><span class="divider-text">Tiến trình</span></div>
-            <button id="btn-next-3" class="btn-next" onclick="chuyenTrang(4)" data-req="2" data-done="0">
-                <i class="fas fa-lock"></i> &nbsp; Hoàn thành 0/2
-            </button>
+            <a href="#" id="btn-next-3" class="btn-next" onclick="xuLyClickQuangCao(this, 4); return false;" data-req="2" data-done="0">
+                <i class="fas fa-lock"></i> Hoàn thành 0/2
+            </a>
         </div>
 
         <div id="step4" class="step">
@@ -104,14 +123,14 @@
                 <span><i class="fas fa-users"></i> &nbsp; Tham gia Zalo</span> <i class="fas fa-chevron-right"></i>
             </a>
             
-            <a id="task-4-2" href="https://www.effectivegatecpm.com/wg1qvzvr8x?key=d28637e87066c0e12b4fae327d34c789" target="_blank" class="btn-task btn-ads" onclick="xuLyQuangCao(this, 4)">
-                <span><i class="fas fa-star"></i> &nbsp;Xác minh không phải Robot (Ấn vào và chờ 5 giây)  </span> <i class="fas fa-external-link-alt"></i>
+            <a id="task-4-2" href="#" class="btn-task btn-ads" onclick="xuLyQuangCao5s(this, 4); return false;">
+                <span><i class="fas fa-star"></i> &nbsp; Xác minh Robot (Click 5s)</span> <i class="fas fa-external-link-alt"></i>
             </a>
 
             <div class="divider-container"><div class="divider-line"></div><span class="divider-text">Tiến trình</span></div>
-            <button id="btn-next-4" class="btn-next" onclick="chuyenTrang(5)" data-req="2" data-done="0">
-                <i class="fas fa-lock"></i> &nbsp; Hoàn thành 0/2
-            </button>
+            <a href="#" id="btn-next-4" class="btn-next" onclick="xuLyClickQuangCao(this, 5); return false;" data-req="2" data-done="0">
+                <i class="fas fa-lock"></i> Hoàn thành 0/2
+            </a>
         </div>
 
         <div id="step5" class="step">
@@ -119,23 +138,48 @@
             <h2 style="color: #27ae60;">Thành Công!</h2>
             <p>Link tải của bạn ở bên dưới.</p>
             <div class="divider-container"><div class="divider-line"></div><span class="divider-text">Hoàn tất</span></div>
-            <a href="#" id="finalLink" class="btn-next unlocked">
-                <i class="fas fa-download"></i> &nbsp; TẢI FILE NGAY
+            <a href="#" id="finalLink" class="btn-next unlocked" onclick="xuLyClickQuangCao(this, 'link_goc'); return false;">
+                <i class="fas fa-download"></i> TẢI FILE NGAY
             </a>
         </div>
     </div>
 
     <script>
-        // === 0. CẤU HÌNH LƯU TRỮ (QUAN TRỌNG) ===
-        // Lấy ID của link (để tránh làm link A mà link B cũng mở)
+        // === CẤU HÌNH LINK DIRECT LINK (Thay link của bạn vào đây) ===
+        const MY_DIRECT_LINK = "https://www.effectivegatecpm.com/wg1qvzvr8x?key=d28637e87066c0e12b4fae327d34c789";
+
+        // === 1. LOGIC 2 CLICK (Double Tap) ===
+        // Áp dụng cho nút Bắt đầu, Qua bước, Tải file
+        function xuLyClickQuangCao(btn, nextStep) {
+            // Nếu nút chưa mở khóa (có class unlocked mới chạy)
+            if (!btn.classList.contains('unlocked')) return;
+
+            // Kiểm tra xem đã bấm QC lần nào chưa?
+            if (!btn.dataset.clickedAds) {
+                // LẦN 1: Mở QC
+                window.open(MY_DIRECT_LINK, '_blank');
+                
+                // Đánh dấu đã bấm
+                btn.dataset.clickedAds = "true";
+                return; // Dừng lại, không chuyển trang
+            }
+
+            // LẦN 2 (Khi đã bấm QC): Thực hiện chuyển trang
+            if (nextStep === 'link_goc') {
+                // Mở link gốc
+                window.location.href = document.getElementById('finalLink').href;
+            } else {
+                chuyenTrang(nextStep);
+            }
+        }
+
+        // === 0. CẤU HÌNH LƯU TRỮ ===
         const params = new URLSearchParams(window.location.search);
         const linkID = params.get('id') || params.get('link') || 'demo';
-        const storageKey = 'link_tasks_' + linkID; // Key lưu trữ: link_tasks_ZXhhbXBsZQ==
+        const storageKey = 'link_tasks_' + linkID;
 
-        // === 1. LOGIC LƯU VÀ KHÔI PHỤC TRẠNG THÁI NÚT ===
-        
+        // === 2. LOGIC LƯU VÀ KHÔI PHỤC ===
         function saveTask(btnId) {
-            // Lấy danh sách đã lưu
             let saved = JSON.parse(localStorage.getItem(storageKey) || "[]");
             if (!saved.includes(btnId)) {
                 saved.push(btnId);
@@ -145,20 +189,14 @@
 
         function restoreTasks() {
             let saved = JSON.parse(localStorage.getItem(storageKey) || "[]");
-            
-            // Duyệt qua tất cả các ID đã lưu
             saved.forEach(btnId => {
                 let el = document.getElementById(btnId);
                 if (el) {
-                    // Biến nó thành màu xanh ngay lập tức
                     el.classList.add('done');
                     el.innerHTML = '<i class="fas fa-check-circle"></i> &nbsp; Đã hoàn thành';
-                    // Ẩn icon cũ nếu cần
                     if(el.querySelector('.fa-chevron-right')) el.querySelector('.fa-chevron-right').style.display = 'none';
                     if(el.querySelector('.fa-external-link-alt')) el.querySelector('.fa-external-link-alt').style.display = 'none';
                     
-                    // Cập nhật lại thanh đếm của bước đó (Quan trọng!)
-                    // Tìm xem nút này thuộc Step mấy (thông qua hàm onclick)
                     let clickAttr = el.getAttribute('onclick');
                     if(clickAttr) {
                         let stepMatch = clickAttr.match(/,\s*(\d+)\)/);
@@ -176,15 +214,18 @@
             let req = parseInt(btn.dataset.req);
             let done = parseInt(btn.dataset.done) + 1;
             btn.dataset.done = done;
-            btn.innerHTML = `<i class="fas fa-lock"></i> &nbsp; Hoàn thành ${done}/${req}`;
+            
+            // Xóa nội dung cũ để cập nhật mới cho chuẩn
+            btn.innerHTML = `<i class="fas fa-lock"></i> Hoàn thành ${done}/${req}`;
             
             if(done >= req) {
                 btn.classList.add('unlocked');
-                btn.innerHTML = 'TIẾP TỤC &nbsp; <i class="fas fa-arrow-right"></i>';
+                btn.innerHTML = 'TIẾP TỤC <i class="fas fa-arrow-right"></i>';
+                // Khi mở khóa thì reset trạng thái click để bắt buộc bấm QC lại
+                btn.removeAttribute('data-clicked-ads');
             }
         }
 
-        // === 2. LOGIC CHỐNG RELOAD TRANG (GIỮ NGUYÊN) ===
         function khoiPhucTrang() {
             let hash = window.location.hash; 
             if (hash && hash.includes('step')) {
@@ -193,52 +234,42 @@
             } else {
                 document.getElementById('step1').classList.add('active');
             }
-            // Gọi khôi phục nút sau khi khôi phục trang
             restoreTasks();
         }
 
-        // === 3. HÀM CHUYỂN TRANG ===
         function chuyenTrang(n, updateHistory = true) {
             let actives = document.getElementsByClassName('active');
             while (actives.length) actives[0].classList.remove('active');
-            
             let target = document.getElementById('step' + n);
             if(target) target.classList.add('active');
-            
             let bar = document.getElementById('myBar');
             if(bar) bar.style.width = ((n-1)*25) + "%";
-
             if (updateHistory) window.location.hash = "step" + n;
         }
 
-        // === 4. XỬ LÝ NHIỆM VỤ THƯỜNG ===
+        // === 3. XỬ LÝ NHIỆM VỤ SẠCH (YouTube/Zalo) ===
         function xuLyNhiemVu(el, step) {
             if(el.classList.contains('done')) return;
-            
             el.classList.add('loading');
             el.querySelector('span').innerHTML = '<div class="spinner"></div> Đang kiểm tra...';
             el.querySelector('.fa-chevron-right').style.display = 'none';
-            
             setTimeout(() => {
                 el.classList.remove('loading');
                 el.classList.add('done');
                 el.innerHTML = '<i class="fas fa-check-circle"></i> &nbsp; Đã hoàn thành';
-                
-                saveTask(el.id); // <--- LƯU LẠI VÀO BỘ NHỚ
+                saveTask(el.id);
                 checkNext(step);
             }, 2000);
         }
 
-        // === 5. XỬ LÝ QUẢNG CÁO 5S ===
-        function xuLyQuangCao(el, step) {
+        // === 4. XỬ LÝ QUẢNG CÁO 5S (Có mở link) ===
+        function xuLyQuangCao5s(el, step) {
             if(el.classList.contains('done')) return;
-            
+            window.open(MY_DIRECT_LINK, '_blank'); // Mở QC
             el.classList.add('loading');
             el.querySelector('.fa-external-link-alt').style.display = 'none';
-            
             let count = 5;
             el.querySelector('span').innerHTML = `<div class="spinner"></div> ⏳ Chờ ${count}s...`;
-            
             let timer = setInterval(() => {
                 count--;
                 el.querySelector('span').innerHTML = `<div class="spinner"></div> ⏳ Chờ ${count}s...`;
@@ -247,8 +278,7 @@
                     el.classList.remove('loading');
                     el.classList.add('done');
                     el.innerHTML = '<i class="fas fa-check-circle"></i> &nbsp; Đã hoàn thành';
-                    
-                    saveTask(el.id); // <--- LƯU LẠI VÀO BỘ NHỚ
+                    saveTask(el.id);
                     checkNext(step);
                 }
             }, 1000);
@@ -259,19 +289,18 @@
             let req = parseInt(btn.dataset.req);
             let done = parseInt(btn.dataset.done) + 1;
             btn.dataset.done = done;
-            btn.innerHTML = `<i class="fas fa-lock"></i> &nbsp; Hoàn thành ${done}/${req}`;
-
+            btn.innerHTML = `<i class="fas fa-lock"></i> Hoàn thành ${done}/${req}`;
             if(done >= req) {
                 btn.classList.add('unlocked');
-                btn.innerHTML = 'TIẾP TỤC &nbsp; <i class="fas fa-arrow-right"></i>';
+                btn.innerHTML = 'TIẾP TỤC <i class="fas fa-arrow-right"></i>';
+                btn.removeAttribute('data-clicked-ads');
             }
         }
 
-        // === 6. KHỞI CHẠY ===
+        // === 5. KHỞI CHẠY ===
         if (params.get('link')) document.getElementById('finalLink').href = params.get('link');
         if (params.get('id')) { try { document.getElementById('finalLink').href = atob(params.get('id')); } catch(e){} }
-
-        khoiPhucTrang(); // Chạy ngay lập tức
+        khoiPhucTrang();
     </script>
     
     <script async src="https://pl28509723.effectivegatecpm.com/50/5f/53/505f5395f6cbf8e7c711f97b861a4233.js"></script>
