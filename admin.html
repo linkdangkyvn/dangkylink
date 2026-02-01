@@ -3,36 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Tool - Link4Sub & Link4M</title>
+    <title>Admin Tool V3.1 - Quick Link</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; padding-top: 30px; }
         .card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 500px; }
         h2 { text-align: center; color: #2c3e50; margin-top: 0; font-weight: 800; }
         label { font-weight: bold; display: block; margin-top: 15px; color: #34495e; font-size: 14px; }
         
-        /* INPUT GROUP */
         .input-group { display: flex; align-items: center; gap: 8px; position: relative; }
         input { flex: 1; padding: 12px; margin-top: 5px; border: 2px solid #ecf0f1; border-radius: 8px; box-sizing: border-box; font-size: 14px; transition: 0.3s; }
         input:focus { border-color: #3498db; outline: none; }
         
-        /* BUTTONS */
         .clear-btn { background: #e74c3c; color: white; border: none; border-radius: 8px; width: 45px; height: 43px; margin-top: 5px; cursor: pointer; font-size: 18px; }
         .copy-btn { width: 100%; padding: 10px; margin-top: 10px; background: #2ecc71; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .copy-btn:hover { background: #27ae60; }
 
-        /* LINK4M BUTTON */
-        .link4m-btn { 
+        /* NÚT QUICK LINK MỚI */
+        .quick-btn { 
             width: 100%; padding: 12px; margin-top: 15px; 
-            background: linear-gradient(135deg, #0984e3, #74b9ff); 
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe); 
             color: white; border: none; border-radius: 8px; 
             font-weight: bold; cursor: pointer; font-size: 15px;
             display: flex; justify-content: center; align-items: center; gap: 8px;
+            text-decoration: none; /* Bỏ gạch chân thẻ a */
+            box-shadow: 0 4px 10px rgba(108, 92, 231, 0.3);
+            transition: 0.2s;
         }
-        .link4m-btn:hover { opacity: 0.9; }
+        .quick-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(108, 92, 231, 0.4); }
 
         .result-box { margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; border: 1px dashed #bdc3c7; display: none; word-wrap: break-word; }
         .link-text { color: #d63384; font-weight: bold; font-size: 13px; margin-bottom: 5px; display: block; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>🛠️ MÁY TẠO LINK V3.1</h2>
+        <p style="color:#7f8c8d; font-size: 13px; text-align:center;">Hệ thống V11 + Link4M Quick Link</p>
         
+        <label>1. Dán link gốc (Drive/Fshare):</label>
+        <div class="input-group">
+            <input type="text" id="linkInput" placeholder="https://drive.google.com/..." oninput="taoLink()">
+            <button class="clear-btn" onclick="xoaLink()">✖</button>
+        </div>
+
+        <div id="ketQua" class="result-box">
+            <label style="margin-top:0; color:#27ae60;">✅ Link Hệ Thống (V11):</label>
+            <span id="linkOutput" class="link-text"></span>
+            <button class="copy-btn" onclick="copyText()">Sao Chép Link Này</button>
+
+            <hr style="margin: 20px 0; border: 0; border-top: 1px dashed #b2bec3;">
+
+            <label style="color:#6c5ce7;">🚀 Tạo Link Kiếm Tiền (Link4M):</label>
+            <p style="font-size: 12px; color: #636e72; margin-bottom: 5px;">Bấm nút dưới -> Nó sẽ tự mở trang Link4M để bạn lấy link.</p>
+            
+            <a id="btnQuickLink" href="#" target="_blank" class="quick-btn">
+                <i class="fas fa-bolt"></i> 👉 BẤM ĐỂ LẤY LINK KIẾM TIỀN
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Token lấy từ ảnh image_34399e.png của bạn
+        const API_TOKEN = "67b810f67e172c3e986014e3"; 
+
+        function taoLink() {
+            let linkGoc = document.getElementById("linkInput").value.trim();
+            if (linkGoc.length < 5) {
+                document.getElementById("ketQua").style.display = "none";
+                return;
+            }
+
+            // 1. Tạo link hệ thống (V11)
+            let linkMaHoa = btoa(linkGoc);
+            let trangChu = window.location.href.replace("admin.html", "");
+            if(trangChu.endsWith("/")) trangChu = trangChu.slice(0, -1);
+            let linkHeThong = trangChu + "/?id=" + linkMaHoa;
+
+            // Hiển thị link hệ thống
+            document.getElementById("linkOutput").innerText = linkHeThong;
+            document.getElementById("ketQua").style.display = "block";
+
+            // 2. Tạo Quick Link cho Link4M (Dựa trên ảnh image_34399e.png)
+            // Cấu trúc: https://link4m.co/st?api=TOKEN&url=LINK_CẦN_RÚT
+            let quickLink = `https://link4m.co/st?api=${API_TOKEN}&url=${encodeURIComponent(linkHeThong)}`;
+            
+            // Gán vào nút bấm
+            document.getElementById("btnQuickLink").href = quickLink;
+        }
+
+        function copyText() {
+            let text = document.getElementById("linkOutput").innerText;
+            navigator.clipboard.writeText(text);
+            let btn = document.querySelector('.copy-btn');
+            let oldText = btn.innerText;
+            btn.innerText = "Đã Copy! ✅";
+            setTimeout(() => { btn.innerText = oldText; }, 2000);
+        }
+
+        function xoaLink() {
+            document.getElementById("linkInput").value = "";
+            document.getElementById("ketQua").style.display = "none";
+            document.getElementById("linkInput").focus();
+        }
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</body>
+</html>        
         /* LOADING SPINNER */
         .spinner { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 16px; height: 16px; animation: spin 1s linear infinite; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
