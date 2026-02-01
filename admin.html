@@ -3,116 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Công Cụ Tạo Link Link4Sub</title>
+    <title>Admin Tool - Link4Sub & Link4M</title>
     <style>
-        body { font-family: sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; padding-top: 50px; }
-        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 90%; max-width: 500px; }
-        h2 { text-align: center; color: #333; margin-top: 0; }
-        label { font-weight: bold; display: block; margin-top: 15px; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; padding-top: 30px; }
+        .card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 500px; }
+        h2 { text-align: center; color: #2c3e50; margin-top: 0; font-weight: 800; }
+        label { font-weight: bold; display: block; margin-top: 15px; color: #34495e; font-size: 14px; }
         
-        /* KHU VỰC NHẬP LINK + NÚT XÓA */
-        .input-group {
-            display: flex;
-            align-items: center;
-            gap: 8px; /* Khoảng cách giữa ô nhập và nút X */
-        }
+        /* INPUT GROUP */
+        .input-group { display: flex; align-items: center; gap: 8px; position: relative; }
+        input { flex: 1; padding: 12px; margin-top: 5px; border: 2px solid #ecf0f1; border-radius: 8px; box-sizing: border-box; font-size: 14px; transition: 0.3s; }
+        input:focus { border-color: #3498db; outline: none; }
         
-        input { 
-            flex: 1; /* Ô nhập chiếm hết chỗ trống */
-            padding: 12px; margin-top: 5px; 
-            border: 1px solid #ddd; border-radius: 6px; 
-            box-sizing: border-box; 
-        }
-        
-        /* NÚT XÓA (MÀU ĐỎ) */
-        .clear-btn {
-            width: 50px;
-            background: #dc3545; /* Màu đỏ */
-            color: white;
-            border: none; border-radius: 6px;
-            font-size: 18px; font-weight: bold;
-            padding: 11px; margin-top: 5px;
-            cursor: pointer;
-        }
-        .clear-btn:hover { background: #c82333; }
+        /* BUTTONS */
+        .clear-btn { background: #e74c3c; color: white; border: none; border-radius: 8px; width: 45px; height: 43px; margin-top: 5px; cursor: pointer; font-size: 18px; }
+        .copy-btn { width: 100%; padding: 10px; margin-top: 10px; background: #2ecc71; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .copy-btn:hover { background: #27ae60; }
 
-        /* NÚT SAO CHÉP */
-        .copy-btn { width: 100%; padding: 12px; margin-top: 20px; background: #28a745; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; }
-        .copy-btn:hover { background: #218838; }
+        /* LINK4M BUTTON */
+        .link4m-btn { 
+            width: 100%; padding: 12px; margin-top: 15px; 
+            background: linear-gradient(135deg, #0984e3, #74b9ff); 
+            color: white; border: none; border-radius: 8px; 
+            font-weight: bold; cursor: pointer; font-size: 15px;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+        }
+        .link4m-btn:hover { opacity: 0.9; }
+
+        .result-box { margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; border: 1px dashed #bdc3c7; display: none; word-wrap: break-word; }
+        .link-text { color: #d63384; font-weight: bold; font-size: 13px; margin-bottom: 5px; display: block; font-family: monospace; }
         
-        .result-box { margin-top: 20px; padding: 15px; background: #e9ecef; border-radius: 6px; display: none; word-wrap: break-word; }
-        .link-text { color: #d63384; font-weight: bold; margin-bottom: 10px; display: block; }
+        /* LOADING SPINNER */
+        .spinner { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 16px; height: 16px; animation: spin 1s linear infinite; display: none; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <h2>🛠️ MÁY TẠO LINK</h2>
-        <p style="color:#666; font-size: 14px; text-align:center;">Biến 1 link gốc thành link kiếm tiền trong 1 giây.</p>
+        <h2>🛠️ MÁY TẠO LINK ĐA NĂNG</h2>
+        <p style="color:#7f8c8d; font-size: 13px; text-align:center;">Hệ thống V11 + Rút gọn Link4M API</p>
         
-        <label>Dán link gốc vào đây (Drive, Fshare...):</label>
-        
+        <label>1. Dán link gốc (Drive/Fshare):</label>
         <div class="input-group">
             <input type="text" id="linkInput" placeholder="https://drive.google.com/..." oninput="taoLink()">
-            <button class="clear-btn" onclick="xoaLink()" title="Xóa link cũ">✖</button>
+            <button class="clear-btn" onclick="xoaLink()">✖</button>
         </div>
 
         <div id="ketQua" class="result-box">
-            <label>Link kiếm tiền của bạn:</label>
+            <label style="margin-top:0; color:#27ae60;">✅ Link Hệ Thống (V11):</label>
             <span id="linkOutput" class="link-text"></span>
-            <button class="copy-btn" onclick="copyLink()">Sao Chép Ngay</button>
+            <button class="copy-btn" onclick="copyText('linkOutput', this)">Sao Chép Link Này</button>
+
+            <hr style="margin: 15px 0; border: 0; border-top: 1px solid #ddd;">
+
+            <button class="link4m-btn" onclick="rutGonLink4M(this)">
+                <div class="spinner"></div> 🚀 Rút gọn qua Link4M ngay
+            </button>
+        </div>
+
+        <div id="ketQua4M" class="result-box" style="background: #e3f2fd; border-color: #64b5f6;">
+            <label style="margin-top:0; color:#0984e3;">💰 Link Kiếm Tiền (Link4M):</label>
+            <span id="link4MOutput" class="link-text" style="color:#2980b9; font-size: 15px;"></span>
+            <button class="copy-btn" style="background:#0984e3;" onclick="copyText('link4MOutput', this)">Sao Chép Link4M</button>
         </div>
     </div>
 
     <script>
-        // HÀM TẠO LINK TỰ ĐỘNG
+        // TOKEN CỦA BẠN (Lấy từ ảnh bạn gửi)
+        const API_TOKEN = "67b810f67e172c3e986014e3"; 
+
         function taoLink() {
             let linkGoc = document.getElementById("linkInput").value.trim();
-            
-            // Chặn nếu dán nhầm link đã mã hóa
-            if (linkGoc.includes("?id=")) {
-                alert("Đừng dán link đã mã hóa! Hãy dán link gốc.");
-                xoaLink();
-                return;
-            }
-
             if (linkGoc.length < 5) {
                 document.getElementById("ketQua").style.display = "none";
+                document.getElementById("ketQua4M").style.display = "none";
                 return;
             }
 
+            // Tạo link hệ thống (V11)
             let linkMaHoa = btoa(linkGoc);
             let trangChu = window.location.href.replace("admin.html", "");
-            let linkXong = trangChu + "?id=" + linkMaHoa;
+            // Xóa dấu / ở cuối nếu có để tránh lỗi 2 dấu //
+            if(trangChu.endsWith("/")) trangChu = trangChu.slice(0, -1);
+            
+            let linkXong = trangChu + "/?id=" + linkMaHoa;
 
             document.getElementById("linkOutput").innerText = linkXong;
             document.getElementById("ketQua").style.display = "block";
+            
+            // Ẩn kết quả Link4M cũ đi khi nhập link mới
+            document.getElementById("ketQua4M").style.display = "none";
         }
 
-        // HÀM SAO CHÉP (KHÔNG HIỆN THÔNG BÁO PHIỀN)
-        function copyLink() {
-            let text = document.getElementById("linkOutput").innerText;
+        // HÀM GỌI API LINK4M
+        async function rutGonLink4M(btn) {
+            let linkHeThong = document.getElementById("linkOutput").innerText;
+            if (!linkHeThong) return;
+
+            // Hiệu ứng Loading
+            let spinner = btn.querySelector('.spinner');
+            let oldText = btn.lastChild.textContent;
+            spinner.style.display = 'block';
+            btn.lastChild.textContent = " Đang kết nối Link4M...";
+            btn.disabled = true;
+
+            try {
+                // Gọi API Link4M
+                let apiUrl = `https://link4m.co/api?api=${API_TOKEN}&url=${encodeURIComponent(linkHeThong)}`;
+                
+                let response = await fetch(apiUrl);
+                let data = await response.json();
+
+                if (data.status === "success") {
+                    document.getElementById("link4MOutput").innerText = data.shortenedUrl;
+                    document.getElementById("ketQua4M").style.display = "block";
+                } else {
+                    alert("Lỗi Link4M: " + data.message);
+                }
+            } catch (error) {
+                console.error(error);
+                // Lỗi CORS thường gặp khi chạy trên Github Pages
+                alert("Không thể kết nối trực tiếp đến Link4M (Do chặn CORS). Bạn hãy dùng link 'Quick Link' thủ công hoặc cài Extension 'Allow CORS' để fix lỗi này.");
+            }
+
+            // Trả lại trạng thái nút
+            spinner.style.display = 'none';
+            btn.lastChild.textContent = oldText;
+            btn.disabled = false;
+        }
+
+        function copyText(id, btn) {
+            let text = document.getElementById(id).innerText;
             navigator.clipboard.writeText(text);
-            
-            // Hiệu ứng đổi màu nút
-            let btn = document.querySelector('.copy-btn');
+            let oldText = btn.innerText;
             btn.innerText = "Đã Copy! ✅";
-            btn.style.background = "#333";
-            
-            setTimeout(() => {
-                btn.innerText = "Sao Chép Ngay";
-                btn.style.background = "#28a745";
-            }, 2000);
+            setTimeout(() => { btn.innerText = oldText; }, 2000);
         }
 
-        // HÀM XÓA LINK (NÚT MÀU ĐỎ)
         function xoaLink() {
-            let input = document.getElementById("linkInput");
-            input.value = ""; // Xóa chữ
-            document.getElementById("ketQua").style.display = "none"; // Ẩn kết quả
-            input.focus(); // Đặt con trỏ chuột lại vào ô nhập
+            document.getElementById("linkInput").value = "";
+            document.getElementById("ketQua").style.display = "none";
+            document.getElementById("ketQua4M").style.display = "none";
+            document.getElementById("linkInput").focus();
         }
     </script>
-
 </body>
 </html>
