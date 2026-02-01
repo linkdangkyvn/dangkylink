@@ -3,64 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Tool V3.2 - Final UI</title>
+    <title>Admin Tool V3.3 - Pro Paste</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* CẤU HÌNH CHUNG */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            margin: 0; 
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; margin: 0; 
         }
 
-        /* THẺ CARD CHÍNH */
         .card { 
-            background: white; 
-            padding: 40px 30px; 
-            border-radius: 20px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
-            width: 90%; 
-            max-width: 480px; 
+            background: white; padding: 40px 30px; border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 90%; max-width: 480px; 
             text-align: center;
         }
 
         h2 { color: #2d3436; margin: 0 0 5px 0; font-weight: 800; letter-spacing: -0.5px; }
         p.sub-title { color: #636e72; font-size: 14px; margin-bottom: 25px; }
-        
         label { font-weight: 700; display: block; margin-top: 20px; color: #2d3436; text-align: left; font-size: 14px; }
         
-        /* Ô NHẬP LIỆU */
+        /* Ô NHẬP LIỆU CHỈNH SỬA */
         .input-group { position: relative; display: flex; align-items: center; }
         
         input { 
-            width: 100%; 
-            padding: 14px 15px; 
-            margin-top: 8px; 
-            border: 2px solid #dfe6e9; 
-            border-radius: 10px; 
-            box-sizing: border-box; 
-            font-size: 15px; 
-            transition: 0.3s; 
-            outline: none;
+            width: 100%; padding: 14px 15px; margin-top: 8px; 
+            border: 2px solid #dfe6e9; border-radius: 10px; 
+            box-sizing: border-box; font-size: 15px; transition: 0.3s; outline: none;
+            padding-right: 85px; /* Chừa chỗ cho 2 nút bấm */
         }
         input:focus { border-color: #6c5ce7; box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1); }
         
-        /* NÚT XÓA (X) */
-        .clear-btn { 
-            position: absolute; 
-            right: 10px; 
-            top: 55%; 
-            transform: translateY(-50%);
-            background: #ff7675; 
-            color: white; 
-            border: none; 
-            border-radius: 50%; 
-            width: 24px; 
-            height: 24px; 
+        /* CỤM NÚT HÀNH ĐỘNG (DÁN + XÓA) */
+        .action-btns {
+            position: absolute; right: 8px; top: 58%; 
+            transform: translateY(-50%); display: flex; gap: 5px;
+        }
+
+        .icon-btn {
+            width: 32px; height: 32px; border: none; border-radius: 8px; 
+            cursor: pointer; display: flex; justify-content: center; align-items: center; 
+            font-size: 14px; transition: 0.2s; color: white;
+        }
+
+        /* Nút Dán (Màu xanh) */
+        .paste-btn { background: #0984e3; }
+        .paste-btn:hover { background: #74b9ff; }
+
+        /* Nút Xóa (Màu đỏ) */
+        .clear-btn { background: #ff7675; }
+        .clear-btn:hover { background: #d63031; }
+
+        /* CÁC NÚT KHÁC */
+        .copy-btn { width: 100%; padding: 12px; margin-top: 10px; background: #00b894; color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 15px; }
+        .copy-btn:hover { background: #00cec9; transform: translateY(-2px); }
+
+        .quick-btn { width: 100%; padding: 14px; margin-top: 15px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 15px; display: flex; justify-content: center; align-items: center; gap: 10px; text-decoration: none; box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3); transition: 0.3s; box-sizing: border-box; }
+        .quick-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(108, 92, 231, 0.4); }
+
+        .result-box { margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 12px; border: 1px dashed #b2bec3; display: none; text-align: left; word-wrap: break-word; }
+        .link-text { color: #d63031; font-weight: 600; font-size: 13px; margin-bottom: 5px; display: block; font-family: 'Consolas', monospace; background: #fff; padding: 8px; border-radius: 6px; border: 1px solid #dfe6e9; }
+        hr { border: 0; border-top: 1px dashed #dfe6e9; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div style="font-size: 40px; margin-bottom: 10px;">🛠️</div>
+        <h2>MÁY TẠO LINK V3.3</h2>
+        <p class="sub-title">Hệ thống V11 + Paste & Quick Link</p>
+        
+        <label><i class="fas fa-link"></i> Dán link gốc (Drive/Fshare):</label>
+        <div class="input-group">
+            <input type="text" id="linkInput" placeholder="Ví dụ: https://drive.google.com/..." oninput="taoLink()">
+            
+            <div class="action-btns">
+                <button class="icon-btn paste-btn" onclick="danLink()" title="Dán Link"><i class="fas fa-paste"></i></button>
+                <button class="icon-btn clear-btn" onclick="xoaLink()" title="Xóa"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+
+        <div id="ketQua" class="result-box">
+            <label style="margin-top:0; color:#00b894;"><i class="fas fa-check-circle"></i> Link Hệ Thống (V11):</label>
+            <span id="linkOutput" class="link-text"></span>
+            <button class="copy-btn" onclick="copyText()"><i class="far fa-copy"></i> Sao Chép Link Này</button>
+
+            <hr>
+
+            <label style="color:#6c5ce7; margin-top:0;"><i class="fas fa-money-bill-wave"></i> Tạo Link Kiếm Tiền (Link4M):</label>
+            <p style="font-size: 13px; color: #636e72; margin: 5px 0 15px 0;">Bấm nút dưới để mở trang tạo link nhanh:</p>
+            
+            <a id="btnQuickLink" href="#" target="_blank" class="quick-btn">
+                <i class="fas fa-bolt"></i> RÚT GỌN KIẾM TIỀN NGAY
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const API_TOKEN = "67b810f67e172c3e986014e3"; 
+
+        // 1. HÀM DÁN LINK (MỚI)
+        async function danLink() {
+            try {
+                // Đọc nội dung từ clipboard
+                const text = await navigator.clipboard.readText();
+                if (text) {
+                    document.getElementById("linkInput").value = text;
+                    taoLink(); // Tạo link ngay lập tức sau khi dán
+                }
+            } catch (err) {
+                alert('Trình duyệt chưa cho phép dán tự động. Bạn hãy bấm Ctrl+V nhé!');
+            }
+        }
+
+        // 2. HÀM XÓA LINK
+        function xoaLink() {
+            document.getElementById("linkInput").value = "";
+            document.getElementById("ketQua").style.display = "none";
+            document.getElementById("linkInput").focus();
+        }
+
+        // 3. HÀM TẠO LINK (LOGIC CŨ)
+        function taoLink() {
+            let linkGoc = document.getElementById("linkInput").value.trim();
+            if (linkGoc.length < 5) {
+                document.getElementById("ketQua").style.display = "none";
+                return;
+            }
+
+            let linkMaHoa = btoa(linkGoc);
+            let trangChu = window.location.href.replace("admin.html", "");
+            if(trangChu.endsWith("/")) trangChu = trangChu.slice(0, -1);
+            let linkHeThong = trangChu + "/?id=" + linkMaHoa;
+
+            document.getElementById("linkOutput").innerText = linkHeThong;
+            document.getElementById("ketQua").style.display = "block";
+
+            let quickLink = `https://link4m.co/st?api=${API_TOKEN}&url=${encodeURIComponent(linkHeThong)}`;
+            document.getElementById("btnQuickLink").href = quickLink;
+        }
+
+        // 4. HÀM SAO CHÉP
+        function copyText() {
+            let text = document.getElementById("linkOutput").innerText;
+            navigator.clipboard.writeText(text);
+            let btn = document.querySelector('.copy-btn');
+            let oldHTML = btn.innerHTML;
+            btn.innerHTML = "<i class='fas fa-check'></i> Đã Copy!";
+            btn.style.background = "#2d3436";
+            setTimeout(() => { 
+                btn.innerHTML = oldHTML; 
+                btn.style.background = "#00b894";
+            }, 2000);
+        }
+    </script>
+</body>
+</html>            height: 24px; 
             cursor: pointer; 
             font-size: 12px; 
             display: flex; 
